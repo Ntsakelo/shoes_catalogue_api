@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catalogue items</title>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script
+      src="https://kit.fontawesome.com/4f065757a2.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col navMenu">
+          <div class="row row-cols-1 row-cols-md-2">
+            <div class="col big-nav">
+              <h1 class="logo"><span id="letterStyle">BABALO</span> shoes</h1>
+            </div>
+            <div class="col big-nav">
+              <ul class="nav nav-tabs">
+                <li class="nav-item">
+                  <a class="nav-link active allLink" aria-current="page">All</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link menLink">Men</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link womenLink">Women</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link kidsLink" tabindex="-1">Kids</a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link showCart"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasBottom"
+                    aria-controls="offcanvasBottom"
+                    ><i class="fa-solid fa-cart-shopping"
+                      ><span class="count">0</span></i
+                    ></a
+                  >
+                </li>
+              </ul>
+            </div>
+            <div class="col small-nav">
+              <div class="row row-cols-2">
+                <div class="col-9 small-nav">
+                  <h1 class="logo">
+                    <span id="letterStyle">BABALO</span> shoes
+                  </h1>
+                </div>
+                <div class="col-3">
+                  <a
+                    class="cat-small nav-link showCart"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasBottom"
+                    aria-controls="offcanvasBottom"
+                    ><i class="fa-solid fa-cart-shopping" id="catalog"
+                      ><span class="count">0</span></i
+                    ></a
+                  >
+                </div>
+              </div>
+              <div class="collapse" id="navbarToggleExternalContent">
+                <div class="bg-dark p-4">
+                  <a class="smallLink nav-link allLink"
+                    ><h5 class="text-white h4">All</h5></a
+                  >
+                  <a class="smallLink nav-link menLink"
+                    ><h5 class="text-white h4">Men</h5></a
+                  >
+                  <a class="smallLink nav-link womenLink"
+                    ><h5 class="text-white h4">Women</h5></a
+                  >
+                  <a class="smallLink nav-link kidsLink"
+                    ><h5 class="text-white h4">Kids</h5></a
+                  >
+                </div>
+              </div>
+              <nav class="navbar navbar-dark bg-dark">
+                <div class="container-fluid">
+                  <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarToggleExternalContent"
+                    aria-controls="navbarToggleExternalContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                  >
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container myItems">
+      <div class="row row-cols-1 row-cols-md-2">
+        <div class="col myShopping">
+          <h3>Items</h3>
+          <div class="col bagItems">
+            <div class="itemPicture">
+              <img
+                class="showImage"
+                src="https://images.pexels.com/photos/313707/pexels-photo-313707.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                alt="item in cart"
+              />
+            </div>
+            <div class="itemProps">
+              <div class="props">
+                <h6>Cloraine super women</h6>
+                <p>White, 6</p>
+                <h4>R500</h4>
+                <div class="setQty">
+                  <form action="">
+                    <button class="decrease qtyBtn">-</button>
+                    <input class="qtyVal" type="number" value="1" />
+                    <button class="increase qtyBtn" type>+</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+        </div>
+
+        <div class="col purchase">
+          <div class="checkOut">
+            <h3 class="orderHead">Your order</h3>
+            <div class="orderDetails clearfix">
+              <p class="orderQty">1 item(s)</p>
+              <p class="orderTot">R500</p>
+            </div>
+            <div class="totals clearfix">
+              <h5 class="totText">Total</h5>
+              <h5 class="tot">R500</h5>
+            </div>
+            <div class="d-grid gap-2 col-6 mx-auto">
+              <button class="btn btn-primary checkoutBtn" type="button">
+                CHECKOUT
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

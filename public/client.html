@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shoes catalogue</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script
+      src="https://kit.fontawesome.com/4f065757a2.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col navMenu">
+          <div class="row row-cols-1 row-cols-md-2">
+            <div class="col big-nav">
+              <h1 class="logo"><span id="letterStyle">BABALO</span> shoes</h1>
+            </div>
+            <script type="text/x-template" class="bgNavListTemplate">
+              {{#each category}}
+               <li class="nav-item">
+                  <a class="nav-link active {{this.category}}" id="{{this.category}}" aria-current="page">{{this.category}}</a>
+                </li>
+                {{/each}}
+                <li class="nav-item">
+                  <a
+                    class="nav-link showCart"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasBottom"
+                    aria-controls="offcanvasBottom"
+                    ><i class="fa-solid fa-cart-shopping"
+                      ><span class="count">0</span></i
+                    ></a
+                  >
+                </li>
+            </script>
+            <div class="col big-nav">
+              <ul class="nav nav-tabs bgNavList"></ul>
+            </div>
+            <script type="text/x-template" class="navListTemplate">
+               {{#each category}}
+              <a class="smallLink nav-link {{this.category}}" id="{{this.category}}"
+                     ><h5 class="text-white h4">{{this.category}}</h5></a
+                   >
+               {{/each}}
+            </script>
+            <div class="col small-nav">
+              <div class="row row-cols-2">
+                <div class="col-9 small-nav">
+                  <h1 class="logo">
+                    <span id="letterStyle">BABALO</span> shoes
+                  </h1>
+                </div>
+                <div class="col-3">
+                  <a
+                    class="cat-small nav-link showCart"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasBottom"
+                    aria-controls="offcanvasBottom"
+                    ><i class="fa-solid fa-cart-shopping" id="catalog"
+                      ><span class="count">0</span></i
+                    ></a
+                  >
+                </div>
+              </div>
+              <div class="collapse" id="navbarToggleExternalContent">
+                <div class="bg-dark p-4 navList"></div>
+              </div>
+              <nav class="navbar navbar-dark bg-dark">
+                <div class="container-fluid">
+                  <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarToggleExternalContent"
+                    aria-controls="navbarToggleExternalContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                  >
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container slideShow">
+      <div class="row">
+        <div class="col">
+          <div
+            id="carouselExampleInterval"
+            class="carousel slide"
+            data-bs-ride="carousel"
+          >
+            <div class="carousel-inner">
+              <div class="carousel-item active" data-bs-interval="10000">
+                <img
+                  src="./images/image1.jpg"
+                  class="d-block w-100"
+                  alt="..."
+                />
+              </div>
+              <div class="carousel-item" data-bs-interval="2000">
+                <img
+                  src="./images/image2.jpg"
+                  class="d-block w-100"
+                  alt="..."
+                />
+              </div>
+              <div class="carousel-item">
+                <img
+                  src="./images/image3.jpg"
+                  class="d-block w-100"
+                  alt="..."
+                />
+              </div>
+            </div>
+            <button
+              class="carousel-control-prev"
+              type="button"
+              data-bs-target="#carouselExampleInterval"
+              data-bs-slide="prev"
+            >
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button
+              class="carousel-control-next"
+              type="button"
+              data-bs-target="#carouselExampleInterval"
+              data-bs-slide="next"
+            >
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container search">
+      <script type="text/x-template" class="brandListTemplate">
+        <option selected>SELECT BRAND</option>
+        {{#each brand}}
+        <option value="{{this}}">{{this}}</option>
+        {{/each}}
+      </script>
+      <script type="text/x-template" class="sizeListTemplate">
+        <option selected>SELECT SIZE</option>
+        {{#each size}}
+        <option value="{{this}}">{{this}}</option>
+        {{/each}}
+      </script>
+      <script type="text/x-template" class="colorListTemplate">
+         <option selected>SELECT COLOR</option>
+        {{#each color}}
+        <option value="{{this}}">{{this}}</option>
+        {{/each}}
+      </script>
+      <form action="">
+        <div class="row row-cols-1 row-cols-md-4" id="searchOpt">
+          <div class="col">
+            <select
+              class="form-select brandSelect"
+              name="brand"
+              aria-label="Default select example"
+            ></select>
+          </div>
+          <div class="col">
+            <select
+              class="form-select sizeSelect"
+              name="size"
+              aria-label="Default select example"
+            ></select>
+          </div>
+          <div class="col">
+            <select
+              class="form-select colorSelect"
+              name="color"
+              aria-label="Default select example"
+            ></select>
+          </div>
+          <div class="col">
+            <div class="d-grid gap-2 d-md-block">
+              <button class="btn btn-primary searchBtn" type="button">
+                SEARCH
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr />
+    <script type="text/x-template" class="productListTemplate">
+      {{#each item}}
+        <div class="product" id="{{this.id}}">
+          <img
+            class="shoeImg shoe"
+            src="{{this.image_url}}"
+            alt="picture of a shoe"
+          />
+          <p>{{this.edition}}</p>
+          <p>{{this.color}}</p>
+          <p>R{{this.price}}</p>
+          <div class="d-grid gap-2 col-6 mx-auto">
+               <form action="">
+                 <button class="btn btn-primary cartBtn" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" id="{{this.id}}" type="button">
+                   ADD TO CART
+                 </button>
+
+               </form>
+
+          </div>
+        </div>
+       {{/each}}
+    </script>
+    <div class="container products">
+      <div class="row justify-content-center" id="itemsDisplay"></div>
+    </div>
+    <div class="container">
+      <script type="text/x-template" class="cartListTemplate">
+        {{#each cartItem}}
+                <div
+              class="row row-cols-1 row-cols-md-2 row-cols-lg-2"
+              id="items"
+            >
+            <div class="col-6 col-md-2 col-xl-1 itemList">
+
+                    <div class="prodPicture">
+                      <img
+                        class="displayPic"
+                        src={{this.image_url}}
+                        alt="cart item"
+                      />
+                    </div>
+                  </div>
+                  <div class="col itemInfo">
+                    <div class="prodDetails">
+                      <p>{{this.edition}}, {{this.size}} {{this.color}}</p>
+                      <p>R{{this.price}}</p>
+                    </div>
+                  </div>
+                </div>
+                <hr>
+                {{/each}}
+      </script>
+
+      <script type="text/x-template" class="toCartTemplate">
+           <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                ADD ITEM TO CART
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+             <div class="modal-body">
+
+          <div class="mb-3" id="toCartDisplay">
+            {{#each toCartItem}}
+            <div class="toCartImg">
+              <img
+                class="prodImage"
+                src={{this.image_url}}
+                alt="product image"
+              />
+            </div>
+            <div class="toCartDetails">
+              <h4>R{{this.price}}</h4>
+              <h6>{{this.edition}}</h6>
+              <p class="colorTag">{{this.color}}</p>
+              <p class="sizeTag">size</p>
+              <div class="sizes">
+                <div class="size" id="1">1</div>
+                <div class="size" id="2">2</div>
+                <div class="size" id="3">3</div>
+                <div class="size" id="4">4</div>
+                <div class="size" id="5">5</div>
+                <div class="size" id="6">6</div>
+              </div>
+              <p class="catQty">quantity:{{this.stock_qty}} in stock</p>
+              <div class="qtySet">
+                <form action="">
+                  <button class="decrease qtyBtn" type="button">-</button>
+                  <input class="qtyVal" type="number" value="1" aria-valuemax="{{this.qty}}"/>
+                  <button class="increase qtyBtn" type="button">+</button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            CANCEL
+          </button>
+          <button type="button" class="btn btn-primary addtoBag">
+            ADD TO BAG
+          </button>
+        </div>
+        {{/each}}
+      </script>
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content" id="toCartDisplay"></div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="./client.js"></script>
+  </body>
+</html>
