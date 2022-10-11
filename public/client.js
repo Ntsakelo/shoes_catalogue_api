@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const sizeListTemplate = document.querySelector(".sizeListTemplate");
   const sizeStockTemplate = document.querySelector(".sizeStockTemplate");
   const sizeStockDisplay = document.querySelector(".sizeStockDisplay");
+  const catCount = document.querySelector(".count");
+
   const sizes = document.querySelectorAll(".size");
   const navListTemplate = document.querySelector(".navListTemplate");
   const navList = document.querySelector(".navList");
@@ -16,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const decreaseBtn = document.querySelector(".decrease");
   const increaseBtn = document.querySelector(".increase");
   const qtyVal = document.querySelector(".qtyVal");
+  const addtoBag = document.querySelector(".addtoBag");
   //search/filter shoes
   const searchBtn = document.querySelector(".searchBtn");
   const brandSelect = document.querySelector(".brandSelect");
@@ -34,8 +37,10 @@ document.addEventListener("DOMContentLoaded", function () {
         item: data,
       });
       addItem();
+      itemsCount();
     });
   }
+  itemsCount();
   displayProducts();
 
   //display navigation
@@ -52,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
         category: data,
       });
       categoryFilter();
+      itemsCount();
     });
   }
   navigation();
@@ -126,6 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let productId = 0;
   let currentItem;
   let qtyOfSize;
+  let selectedSize;
   ///add to cart
   function addItem() {
     const cartBtn = document.querySelectorAll(".cartBtn");
@@ -165,6 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
       //   size.classList.add("sizeUnselected");
       // }
       let shoeSize = Number(size.id);
+      selectedSize = shoeSize;
       let qtyList = [];
       let quantities = currentItem.quantities;
       quantities.forEach((item) => {
@@ -193,6 +201,29 @@ document.addEventListener("DOMContentLoaded", function () {
     if (qtyVal.value > 1) {
       qtyVal.value--;
     }
+  });
+  function itemsCount() {
+    const catCount2 = document.querySelector(".itemsCount");
+    axios.get("/api/shoes/cartCount").then(function (results) {
+      let response = results.data;
+      let data = response.data;
+      catCount.innerHTML = Number(data.count);
+      catCount2.innerHTML = Number(data.count);
+    });
+  }
+  itemsCount();
+  ///ADD TO BASKET
+  addtoBag.addEventListener("click", function () {
+    let qty = Number(qtyVal.value);
+
+    axios
+      .get(
+        `/api/shoes/addToCart/item/${productId}/quantity/${qty}/size/${selectedSize}`
+      )
+      .then(function () {
+        itemsCount();
+        return;
+      });
   });
   ///
   ///SEARCH FUNCTIONALITY

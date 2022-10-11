@@ -36,7 +36,6 @@ export default function (ShoesData) {
   async function getShoe(req, res, next) {
     try {
       let id = Number(req.params.id);
-      console.log(req.path);
       let results = await ShoesData.selectedShoe(id);
       res.json({
         status: "success",
@@ -176,6 +175,30 @@ export default function (ShoesData) {
       next(err);
     }
   }
+  async function addToCart(req, res, next) {
+    try {
+      let id = Number(req.params.id);
+      let size = Number(req.params.size);
+      let qty = Number(req.params.qty);
+      await ShoesData.addItem(id, size, qty);
+      res.json({
+        status: "success",
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+  async function countItems(req, res, next) {
+    try {
+      let results = await ShoesData.cartCount();
+      res.json({
+        status: "success",
+        data: results,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
   return {
     getCategories,
     displayProducts,
@@ -191,5 +214,7 @@ export default function (ShoesData) {
     searchBrandSize,
     searchAll,
     showByCategory,
+    addToCart,
+    countItems,
   };
 }

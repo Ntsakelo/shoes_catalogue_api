@@ -183,6 +183,31 @@ export default function ShoesData(db) {
       console.log(err);
     }
   }
+  async function addItem(id, size, qty) {
+    try {
+      let results = await db.oneOrNone(
+        "select distinct products.id , category, brand, item AS edition,color,size,price, image_url from products JOIN stock ON products.id = stock.item_id where products.id =$1 and size=$2",
+        [id, size]
+      );
+      let color = results.color;
+      let item = results.edition;
+      let price = results.price;
+      await db.none(
+        "insert into orders(item_id,item,color,size,order_qty,price) values($1,$2,$3,$4,$5,$6)",
+        [id, item, color, size, qty, price]
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async function cartCount() {
+    try {
+      let results = await db.oneOrNone("select count(*) from orders");
+      return results;
+    } catch (err) {
+      console.log(err);
+    }
+  }
   return {
     categories,
     allShoes,
@@ -198,5 +223,7 @@ export default function ShoesData(db) {
     searchByBrandSize,
     searchByAll,
     filterCategory,
+    addItem,
+    cartCount,
   };
 }

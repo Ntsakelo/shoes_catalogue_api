@@ -56,17 +56,18 @@ app.get("/api/shoes/selected/:id", shoesAPI.getShoe);
 app.get("/api/shoes/brand/:brandname", shoesAPI.searchBrand);
 app.get("/api/shoes/size/:size", shoesAPI.searchSize);
 app.get("/api/shoes/color/:color", shoesAPI.searchColor);
-//SEARCH BY BRAND AND COLOR
 app.get("/api/shoes/brand/:brandname/color/:color", shoesAPI.searchBrandColor);
-//SEARCH BY COLOR AND SIZE
 app.get("/api/shoes/size/:size/color/:color", shoesAPI.searchSizeColor);
-//SEARCH BY BRAND AND SIZE
 app.get("/api/shoes/brand/:brandname/size/:size", shoesAPI.searchBrandSize);
-//SEARCH BY ALL
 app.get(
   "/api/shoes/brand/:brandname/size/:size/color/:color",
   shoesAPI.searchAll
 );
+app.get(
+  "/api/shoes/addToCart/item/:id/quantity/:qty/size/:size",
+  shoesAPI.addToCart
+);
+app.get("/api/shoes/cartCount", shoesAPI.countItems);
 app.get("/api/category", shoesAPI.getCategories);
 app.get("/api/shoes/:category", shoesAPI.showByCategory);
 const PORT = process.env.PORT || 3060;
