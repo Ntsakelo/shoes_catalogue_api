@@ -52,7 +52,7 @@ app.get("/api/shoes", shoesAPI.displayProducts);
 app.get("/api/brands", shoesAPI.showBrands);
 app.get("/api/sizes", shoesAPI.showSizes);
 app.get("/api/colors", shoesAPI.showColors);
-app.get("/api/shoes/selected/:id/:size", shoesAPI.getShoe);
+app.get("/api/shoes/selected/:id", shoesAPI.getShoe);
 app.get("/api/shoes/brand/:brandname", shoesAPI.searchBrand);
 app.get("/api/shoes/size/:size", shoesAPI.searchSize);
 app.get("/api/shoes/color/:color", shoesAPI.searchColor);

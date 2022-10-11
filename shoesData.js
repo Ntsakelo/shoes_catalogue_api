@@ -162,26 +162,21 @@ export default function ShoesData(db) {
       console.log(err);
     }
   }
-  async function selectedShoe(id, size) {
+  async function selectedShoe(id) {
     try {
-      if (id && size) {
+      if (id) {
         let results = await db.oneOrNone(
-          "select  products.id , category, brand,stock_qty, item AS edition, color,price, image_url from products JOIN stock ON products.id = stock.item_id where stock.item_id = $1 and size=$2",
-          [id, size]
-        );
-        if (results === null) {
-          results = await db.oneOrNone(
-            "select  products.id , category, brand, item AS edition, color,price, image_url from products JOIN stock ON products.id = stock.item_id where stock.item_id = $1 limit 1",
-            [id]
-          );
-          return results;
-        }
-        return results;
-      } else if (id && !size) {
-        results = await db.oneOrNone(
           "select  products.id , category, brand, item AS edition, color,price, image_url from products JOIN stock ON products.id = stock.item_id where stock.item_id = $1 limit 1",
           [id]
         );
+        let sizeQty = await db.manyOrNone(
+          "select size,stock_qty from stock where item_id=$1",
+          [id]
+        );
+        if (results.quantities === undefined) {
+          results.quantities = sizeQty;
+        }
+        //console.log(results);
         return results;
       }
     } catch (err) {

@@ -35,14 +35,9 @@ export default function (ShoesData) {
   }
   async function getShoe(req, res, next) {
     try {
-      let id = req.params.id;
-      let size = req.params.size;
+      let id = Number(req.params.id);
       console.log(req.path);
-
-      let results = await ShoesData.selectedShoe(id, size);
-      if (results.stock_qty === undefined) {
-        results.stock_qty = 0;
-      }
+      let results = await ShoesData.selectedShoe(id);
       res.json({
         status: "success",
         data: results,

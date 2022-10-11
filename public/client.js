@@ -4,14 +4,18 @@ document.addEventListener("DOMContentLoaded", function () {
   const toCartTemplate = document.querySelector(".toCartTemplate");
   let toCartDisplay = document.querySelector("#toCartDisplay");
   const brandListTemplate = document.querySelector(".brandListTemplate");
-
   const colorListTemplate = document.querySelector(".colorListTemplate");
-
   const sizeListTemplate = document.querySelector(".sizeListTemplate");
+  const sizeStockTemplate = document.querySelector(".sizeStockTemplate");
+  const sizeStockDisplay = document.querySelector(".sizeStockDisplay");
+  const sizes = document.querySelectorAll(".size");
   const navListTemplate = document.querySelector(".navListTemplate");
   const navList = document.querySelector(".navList");
   const bgNavListTemplate = document.querySelector(".bgNavListTemplate");
   const bgNavList = document.querySelector(".bgNavList");
+  const decreaseBtn = document.querySelector(".decrease");
+  const increaseBtn = document.querySelector(".increase");
+  const qtyVal = document.querySelector(".qtyVal");
   //search/filter shoes
   const searchBtn = document.querySelector(".searchBtn");
   const brandSelect = document.querySelector(".brandSelect");
@@ -117,17 +121,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   //add to cart => add event listener for buttons
   //toCartItem handlebars function
-  function toCartCompile(list) {
-    let template = Handlebars.compile(toCartTemplate.innerHTML);
-    toCartDisplay.innerHTML = template({
-      toCartItem: list,
-    });
-  }
-  let productId = 0;
+  //toCartItem
 
+  let productId = 0;
+  let currentItem;
+  let qtyOfSize;
+  ///add to cart
   function addItem() {
-    let shoeSize = 0;
-    showQty();
     const cartBtn = document.querySelectorAll(".cartBtn");
     const product = document.querySelectorAll(".product");
     for (let i = 0; i < cartBtn.length; i++) {
@@ -135,64 +135,68 @@ document.addEventListener("DOMContentLoaded", function () {
       btn.addEventListener("click", function () {
         let id = Number(product[i].id);
         productId = id;
-        axios
-          .get(`/api/shoes/selected/${id}/${shoeSize}`)
-          .then(function (results) {
-            let response = results.data;
-            let data = response.data;
-            let list = [];
-
-            list.push(data);
-            itemList = list;
-            toCartCompile(list);
-            // let template = Handlebars.compile(toCartTemplate.innerHTML);
-            // toCartDisplay.innerHTML = template({
-            //   toCartItem: list,
-            // });
-            //Make this function (showQty) independent of the addItem function
+        sizeStockDisplay.innerHTML = "";
+        qtyVal.value = 1;
+        axios.get(`/api/shoes/selected/${id}`).then(function (results) {
+          let response = results.data;
+          let data = response.data;
+          currentItem = data;
+          let list = [];
+          list.push(data);
+          itemList = list;
+          let template = Handlebars.compile(toCartTemplate.innerHTML);
+          toCartDisplay.innerHTML = template({
+            toCartItem: list,
           });
+        });
       });
     }
   }
-  let selectedSize = 0;
-  function showQty() {
-    const sizes = document.querySelectorAll(".size");
-    sizes.forEach((size) => {
-      size.classList.remove("sizeSelected");
-      size.addEventListener("click", function () {
-        let shoeSize = Number(size.id);
-        selectedSize = shoeSize;
-        if (!size.classList.contains("sizeSelected")) {
-          size.classList.remove("sizeUnselected");
-          size.classList.add("sizeSelected");
-        } else if (size.classList.contains("sizeSelected")) {
-          size.classList.remove("sizeSelected");
-          size.classList.add("sizeUnselected");
+  sizes.forEach((size) => {
+    addItem();
+    size.classList.add("sizeUnselected");
+    size.addEventListener("click", function () {
+      qtyVal.value = 1;
+      // if (!size.classList.contains("sizeSelected")) {
+      //   size.classList.remove("sizeUnselected");
+      //   size.classList.add("sizeSelected");
+      // } else if (size.classList.contains("sizeSelected")) {
+      //   size.classList.remove("sizeSelected");
+      //   size.classList.add("sizeUnselected");
+      // }
+      let shoeSize = Number(size.id);
+      let qtyList = [];
+      let quantities = currentItem.quantities;
+      quantities.forEach((item) => {
+        if (shoeSize === item.size) {
+          qtyList.push(item.stock_qty);
         }
-
-        axios
-          .get(`/api/shoes/selected/${productId}/${shoeSize}`)
-          .then(function (results) {
-            let response = results.data;
-            let data = response.data;
-            let list = [];
-
-            list.push(data);
-            toCartCompile(list);
-            // toCartDisplay = "";
-            // let template = Handlebars.compile(toCartTemplate.innerHTML);
-            // toCartDisplay.innerHTML = template({
-            //   toCartItem: list,
-            // });
-          });
+      });
+      if (qtyList.length <= 0) {
+        qtyVal.value = 0;
+      }
+      qtyOfSize = qtyList;
+      let template = Handlebars.compile(sizeStockTemplate.innerHTML);
+      sizeStockDisplay.innerHTML = template({
+        qty: qtyList,
       });
     });
-  }
-  showQty();
-  //SEARCH FOR SHOES
+  });
+  //ADD ITEM TO CART FOR CHECKOUT
+
+  increaseBtn.addEventListener("click", function () {
+    if (qtyVal.value < qtyOfSize[0]) {
+      qtyVal.value++;
+    }
+  });
+  decreaseBtn.addEventListener("click", function () {
+    if (qtyVal.value > 1) {
+      qtyVal.value--;
+    }
+  });
+  ///
+  ///SEARCH FUNCTIONALITY
   searchBtn.addEventListener("click", function () {
-    let sizeValue = Number(sizeSelect.value);
-    //alert(typeof sizeValue);
     if (brandSelect.value) {
       axios
         .get(`/api/shoes/brand/${brandSelect.value}`)

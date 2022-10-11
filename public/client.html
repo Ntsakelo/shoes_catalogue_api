@@ -278,7 +278,7 @@
             </div>
              <div class="modal-body">
 
-          <div class="mb-3" id="toCartDisplay">
+          <div class="mb-3" id="">
             {{#each toCartItem}}
             <div class="toCartImg">
               <img
@@ -292,39 +292,23 @@
               <h6>{{this.edition}}</h6>
               <p class="colorTag">{{this.color}}</p>
               <p class="sizeTag">size</p>
-              <div class="sizes">
-                <div class="size" id="1">1</div>
-                <div class="size" id="2">2</div>
-                <div class="size" id="3">3</div>
-                <div class="size" id="4">4</div>
-                <div class="size" id="5">5</div>
-                <div class="size" id="6">6</div>
-              </div>
-              <p class="catQty">quantity:{{this.stock_qty}} in stock</p>
-              <div class="qtySet">
-                <form action="">
-                  <button class="decrease qtyBtn" type="button">-</button>
-                  <input class="qtyVal" type="number" value="1" aria-valuemax="{{this.qty}}"/>
-                  <button class="increase qtyBtn" type="button">+</button>
-                </form>
-              </div>
+            </div>
+             {{/each}}
             </div>
           </div>
 
         </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            CANCEL
-          </button>
-          <button type="button" class="btn btn-primary addtoBag">
-            ADD TO BAG
-          </button>
+
         </div>
+      </script>
+      <script type="text/x-template" class="sizeStockTemplate">
+        {{#if qty}}
+        {{#each qty}}
+        <p class="catQty">{{this}} left in stock</p>
         {{/each}}
+        {{else}}
+        <p class="catQty">0 left in stock</p>
+        {{/if}}
       </script>
       <div
         class="modal fade"
@@ -334,7 +318,50 @@
         aria-hidden="true"
       >
         <div class="modal-dialog">
-          <div class="modal-content" id="toCartDisplay"></div>
+          <div class="modal-content">
+            <div>
+              <div id="toCartDisplay"></div>
+              <div id="sizesQty">
+                <div class="toCartSizes">
+                  <div class="sizes">
+                    <div class="size" id="1">1</div>
+                    <div class="size" id="2">2</div>
+                    <div class="size" id="3">3</div>
+                    <div class="size" id="4">4</div>
+                    <div class="size" id="5">5</div>
+                    <div class="size" id="6">6</div>
+                  </div>
+
+                  <div class="sizeStockDisplay"></div>
+                  <div class="qtySet">
+                    <form action="">
+                      <button class="decrease qtyBtn" type="button">-</button>
+                      <input
+                        class="qtyVal"
+                        type="number"
+                        min="1"
+                        value="1"
+                        aria-valuemax="{{this.qty}}"
+                      />
+                      <button class="increase qtyBtn" type="button">+</button>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      CANCEL
+                    </button>
+                    <button type="button" class="btn btn-primary addtoBag">
+                      ADD TO CART
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
