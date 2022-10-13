@@ -202,6 +202,10 @@ export default function ShoesData(db) {
         "insert into orders(item_id,stock_id,item,color,size,order_qty,price) values($1,$2,$3,$4,$5,$6,$7)",
         [id, stockId.id, item, color, size, qty, totalAmount]
       );
+      await db.none(
+        "update stock set stock_qty =stock_qty - $1 where id = $2",
+        [qty, stockId.id]
+      );
     } catch (err) {
       console.log(err);
     }
@@ -209,6 +213,17 @@ export default function ShoesData(db) {
   async function cartCount() {
     try {
       let results = await db.oneOrNone("select count(*) from orders");
+      return results;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async function displayCart() {
+    try {
+      let results = await db.manyOrNone(
+        "select orders.item as edition,orders.color,orders.size,order_qty,orders.price,image_url from orders join products on orders.item_id = products.id"
+      );
+      console.log(results);
       return results;
     } catch (err) {
       console.log(err);
@@ -231,5 +246,6 @@ export default function ShoesData(db) {
     filterCategory,
     addItem,
     cartCount,
+    displayCart,
   };
 }

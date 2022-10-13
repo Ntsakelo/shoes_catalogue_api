@@ -199,6 +199,18 @@ export default function (ShoesData) {
       next(err);
     }
   }
+  async function viewCart(req, res, next) {
+    try {
+      let results = await ShoesData.displayCart();
+
+      res.json({
+        status: "success",
+        data: results,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
   return {
     getCategories,
     displayProducts,
@@ -216,5 +228,6 @@ export default function (ShoesData) {
     showByCategory,
     addToCart,
     countItems,
+    viewCart,
   };
 }

@@ -70,6 +70,7 @@ app.get(
 app.get("/api/shoes/cartCount", shoesAPI.countItems);
 app.get("/api/category", shoesAPI.getCategories);
 app.get("/api/shoes/:category", shoesAPI.showByCategory);
+app.get("/api/orders", shoesAPI.viewCart);
 const PORT = process.env.PORT || 3060;
 app.listen(PORT, function () {
   console.log("app started at port : ", PORT);

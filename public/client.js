@@ -9,7 +9,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const sizeStockTemplate = document.querySelector(".sizeStockTemplate");
   const sizeStockDisplay = document.querySelector(".sizeStockDisplay");
   const catCount = document.querySelector(".count");
-
+  const ordersTemplate = document.querySelector(".ordersTemplate");
+  const ordersDisplay = document.querySelector(".ordersDisplay");
+  const totalTemplate = document.querySelector(".totalTemplate");
+  const totalDisplay = document.querySelector(".purchase");
   const sizes = document.querySelectorAll(".size");
   const navListTemplate = document.querySelector(".navListTemplate");
   const navList = document.querySelector(".navList");
@@ -19,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const increaseBtn = document.querySelector(".increase");
   const qtyVal = document.querySelector(".qtyVal");
   const addtoBag = document.querySelector(".addtoBag");
+
   //search/filter shoes
   const searchBtn = document.querySelector(".searchBtn");
   const brandSelect = document.querySelector(".brandSelect");
@@ -58,6 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
       categoryFilter();
       itemsCount();
+      displayCart();
     });
   }
   navigation();
@@ -208,7 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
       let response = results.data;
       let data = response.data;
       catCount.innerHTML = Number(data.count);
-      catCount2.innerHTML = Number(data.count);
+      //catCount2.innerHTML = Number(data.count);
     });
   }
   itemsCount();
@@ -344,6 +349,35 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
   });
+  function displayCart() {
+    const showCart = document.querySelectorAll(".showCart");
+    showCart.forEach((item) => {
+      item.addEventListener("click", function () {
+        axios.get("/api/orders").then(function (results) {
+          let response = results.data;
+          let data = response.data;
+          let totQty = 0;
+          let totAmount = 0;
+          let totList = [];
+          data.forEach((item) => {
+            totQty += item.order_qty;
+            totAmount += Number(item.price);
+          });
+          totList.push({ totQty, totAmount });
+
+          let template = Handlebars.compile(ordersTemplate.innerHTML);
+          ordersDisplay.innerHTML = template({
+            orderItems: data,
+          });
+          let template2 = Handlebars.compile(totalTemplate.innerHTML);
+          totalDisplay.innerHTML = template2({
+            totals: totList,
+          });
+        });
+      });
+    });
+  }
+  displayCart();
 });
 
 /////
