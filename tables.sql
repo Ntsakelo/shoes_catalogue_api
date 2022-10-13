@@ -21,12 +21,14 @@ CREATE TABLE stock (
 CREATE TABLE orders (
     id serial primary key not null,
     item_id int not null,
+    stock_id int not null,
     item text not null,
     color text not null,
     size int not null,
     order_qty int not null,
     price decimal not null,
-    foreign key(item_id) references products(id) ON DELETE CASCADE
+    foreign key(item_id) references products(id) ON DELETE CASCADE,
+    foreign key(stock_id) references stock(id) ON DELETE CASCADE
 );
 -- INSERT INTO products
 INSERT INTO products (item,brand,category,image_url,price) VALUES ('Ivonia high heels','Ivonia','Women','https://images.pexels.com/photos/336372/pexels-photo-336372.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',400.00);

@@ -192,9 +192,15 @@ export default function ShoesData(db) {
       let color = results.color;
       let item = results.edition;
       let price = results.price;
+      let totalAmount = price * qty;
+      let stockId = await db.oneOrNone(
+        "select id from stock where item_id = $1 and size = $2 and color = $3",
+        [id, size, color]
+      );
+
       await db.none(
-        "insert into orders(item_id,item,color,size,order_qty,price) values($1,$2,$3,$4,$5,$6)",
-        [id, item, color, size, qty, price]
+        "insert into orders(item_id,stock_id,item,color,size,order_qty,price) values($1,$2,$3,$4,$5,$6,$7)",
+        [id, stockId.id, item, color, size, qty, totalAmount]
       );
     } catch (err) {
       console.log(err);
