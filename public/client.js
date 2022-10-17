@@ -208,12 +208,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
   function itemsCount() {
+    //navigation();
     const catCount2 = document.querySelector(".itemsCount");
     axios.get("/api/shoes/cartCount").then(function (results) {
       let response = results.data;
       let data = response.data;
       catCount.innerHTML = Number(data.count);
-      //catCount2.innerHTML = Number(data.count);
+      // catCount2.innerHTML = Number(data.count);
     });
   }
   itemsCount();
@@ -373,11 +374,82 @@ document.addEventListener("DOMContentLoaded", function () {
           totalDisplay.innerHTML = template2({
             totals: totList,
           });
+          myOrderUpdate();
         });
       });
     });
   }
-  displayCart();
+
+  function myOrderUpdate() {
+    const itemTotal = document.querySelectorAll(".itemTotal");
+    const upQty = document.querySelectorAll(".upQty");
+    const downQty = document.querySelectorAll(".downQty");
+    const qtyVal2 = document.querySelectorAll(".qtyVal2");
+    const bagItems = document.querySelectorAll(".bagItems");
+
+    for (let i = 0; i < upQty.length; i++) {
+      let upBtn = upQty[i];
+      upBtn.addEventListener("click", function () {
+        let qty = 0;
+
+        qtyVal2[i].value++;
+        qty = Number(qtyVal2[i].value);
+        let orderId = bagItems[i].id;
+        axios
+          .get(`/api/orders/edit/${qty}/${orderId}`)
+          .then(function (results) {
+            let response = results.data;
+            let data = response.data;
+            let totQty = 0;
+            let totAmount = 0;
+            let totList = [];
+            let itemPrice = data[i].price;
+            data.forEach((item) => {
+              totQty += item.order_qty;
+              totAmount += Number(item.price);
+            });
+            totList.push({ totQty, totAmount });
+            itemTotal[i].innerHTML = "R" + itemPrice;
+            let template2 = Handlebars.compile(totalTemplate.innerHTML);
+            totalDisplay.innerHTML = template2({
+              totals: totList,
+            });
+          });
+      });
+    }
+    for (let i = 0; i < downQty.length; i++) {
+      let downBtn = downQty[i];
+      downBtn.addEventListener("click", function () {
+        let qty = 0;
+
+        if (Number(qtyVal2[i].value) > 1) {
+          qtyVal2[i].value--;
+        }
+        qty = Number(qtyVal2[i].value);
+        let orderId = Number(bagItems[i].id);
+        axios
+          .get(`/api/orders/edit/${qty}/${orderId}`)
+          .then(function (results) {
+            let response = results.data;
+            let data = response.data;
+            let totQty = 0;
+            let totAmount = 0;
+            let totList = [];
+            let itemPrice = data[i].price;
+            data.forEach((item) => {
+              totQty += item.order_qty;
+              totAmount += Number(item.price);
+            });
+            totList.push({ totQty, totAmount });
+            itemTotal[i].innerHTML = "R" + itemPrice;
+            let template2 = Handlebars.compile(totalTemplate.innerHTML);
+            totalDisplay.innerHTML = template2({
+              totals: totList,
+            });
+          });
+      });
+    }
+  }
 });
 
 /////

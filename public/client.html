@@ -362,7 +362,9 @@
       </div>
     <script type="text/x-template" class="ordersTemplate">
       {{#each orderItems}}
-        <div class="col bagItems">
+       <button type="button" class="btn-close removeBtn" aria-label="Close" id={{this.id}}></button>  
+      <div class="col bagItems" id={{this.id}}>
+         
               <div class="itemPicture">
                 <img
                   class="showImage"
@@ -373,13 +375,13 @@
               <div class="itemProps">
                 <div class="props">
                   <h6>{{this.edition}}</h6>
-                  <p>{{this.color}}, {{this.size}}</p>
-                  <h4>R{{this.price}}</h4>
+                  <p>{{this.color}},size {{this.size}}</p>
+                  <h4 class="itemTotal">R{{this.price}}</h4>
                   <div class="setQty">
                     <form action="">
-                      <button class="decrease qtyBtn">-</button>
-                      <input class="qtyVal" type="number" value="{{this.order_qty}}" />
-                      <button class="increase qtyBtn" type>+</button>
+                      <button class="downQty qtyBtn" type="button">-</button>
+                      <input class="qtyVal qtyVal2" type="number" value="{{this.order_qty}}" />
+                      <button class="upQty qtyBtn" type="button">+</button>
                     </form>
                   </div>
                 </div>

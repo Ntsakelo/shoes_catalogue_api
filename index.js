@@ -7,6 +7,7 @@ import flash from "express-flash";
 import pgPromise from "pg-promise";
 import ShoesData from "./shoesData.js";
 import shoesApi from "./api/shoes-api.js";
+import ShoesRoutes from "./routes/shoesCatRoutes.js";
 import cors from "cors";
 const pgp = pgPromise();
 
@@ -48,6 +49,7 @@ app.use(express.static("public"));
 const shoesData = ShoesData(db);
 
 const shoesAPI = shoesApi(shoesData);
+const shoesRoutes = ShoesRoutes(shoesData);
 app.get("/api/shoes", shoesAPI.displayProducts);
 app.get("/api/brands", shoesAPI.showBrands);
 app.get("/api/sizes", shoesAPI.showSizes);
@@ -71,7 +73,26 @@ app.get("/api/shoes/cartCount", shoesAPI.countItems);
 app.get("/api/category", shoesAPI.getCategories);
 app.get("/api/shoes/:category", shoesAPI.showByCategory);
 app.get("/api/orders", shoesAPI.viewCart);
+app.get("/api/orders/edit/:qty/:orderId", shoesAPI.qtyUpdate);
+
 const PORT = process.env.PORT || 3060;
 app.listen(PORT, function () {
   console.log("app started at port : ", PORT);
 });
+app.get("/", shoesRoutes.home);
+app.post("/login", shoesRoutes.login);
+app.use(function (req, res, next) {
+  let user = req.session.user;
+  if (!user) {
+    if (req.path === "/") {
+      next();
+    } else if (req.path !== "/") {
+      res.redirect("/");
+    }
+  } else if (user) {
+    next();
+  }
+});
+app.get("/admin", shoesRoutes.admin);
+app.get("/logout", shoesRoutes.logout);
+app.post("/stockUpdate", shoesRoutes.addToStock);

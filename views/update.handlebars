@@ -1,0 +1,217 @@
+<div class="container">
+  <div class="col">
+    <h1 class="logo adminLogo">
+      <span id="logoLetters">BABALO</span>
+      shoes
+    </h1>
+    <a href="/logout" class="logOut">
+      <button class="btn btn-primary logOutBTN" type="submit">
+        LOG OUT
+      </button>
+
+    </a>
+  </div>
+  <div class="errors">
+    <p class="err">{{messages.info}}</p>
+  </div>
+  <div class="actions">
+    <div class="viewAction">
+      <p>
+        <a
+          class="btn btn-primary actionBtn"
+          data-bs-toggle="collapse"
+          href="#collapseStock"
+          role="button"
+          aria-expanded="false"
+          aria-controls="collapseExample"
+        >
+          View stock
+        </a>
+      </p>
+      <div class="collapse" id="collapseStock">
+        <div class="card card-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Brand</th>
+                <th scope="col">Edition</th>
+                <th scope="col">Size</th>
+                <th scope="col">Color</th>
+                <th scope="col">Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each products}}
+                <tr>
+                  <td>{{this.brand}}</td>
+                  <td>{{this.edition}}</td>
+                  <td>{{this.size}}</td>
+                  <td>{{this.color}}</td>
+                  <td>{{this.stock_qty}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="updateAction">
+      <p>
+        <a
+          class="btn btn-primary actionBtn"
+          data-bs-toggle="collapse"
+          href="#collapseUpdate"
+          role="button"
+          aria-expanded="false"
+          aria-controls="collapse"
+        >
+          Update stock
+        </a>
+      </p>
+      <div class="collapse" id="collapseUpdate">
+        <div class="card card-body">
+          <form action="/stockUpdate" method="post">
+            <select
+              class="form-select"
+              name="updtEdition"
+              aria-label="Default select example"
+            >
+              <option selected>SELECT EDITION</option>
+              {{#each edition}}
+                <option value="{{this.item}}">{{this.item}}</option>
+              {{/each}}
+            </select>
+            <div class="input-group flex-nowrap">
+              <span class="input-group-text" id="addon-wrapping">SIZE</span>
+              <input
+                type="number"
+                class="form-control"
+                name="updtSize"
+                aria-label="quantity"
+                aria-describedby="addon-wrapping"
+              />
+            </div>
+            <div class="input-group flex-nowrap">
+              <span class="input-group-text" id="addon-wrapping">COLOR</span>
+              <input
+                type="text"
+                class="form-control"
+                name="updtColor"
+                aria-label="quantity"
+                aria-describedby="addon-wrapping"
+              />
+            </div>
+            <div class="input-group flex-nowrap">
+              <span class="input-group-text" id="addon-wrapping">QUANTITY</span>
+              <input
+                type="number"
+                class="form-control"
+                name="updtQty"
+                aria-label="quantity"
+                aria-describedby="addon-wrapping"
+              />
+            </div>
+            <button class="btn btn-primary updtBTN" type="submit">
+              UPDATE STOCK
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="addAction">
+      <p>
+        <a
+          class="btn btn-primary actionBtn"
+          data-bs-toggle="collapse"
+          href="#collapseAdd"
+          role="button"
+          aria-expanded="false"
+          aria-controls="collapseExample"
+        >
+          Add stock
+        </a>
+      </p>
+      <div class="collapse" id="collapseAdd">
+        <div class="card card-body">
+          <form action="">
+            <select
+              class="form-select"
+              name="brand"
+              aria-label="Default select example"
+            >
+              <option selected>SELECT BRAND</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+            <div class="input-group">
+              <span class="input-group-text">BRAND</span>
+              <input
+                type="text"
+                name="addBrand"
+                aria-label="First name"
+                class="form-control"
+                disabled
+              />
+            </div>
+            <div class="input-group">
+              <span class="input-group-text">EDITION</span>
+              <input
+                type="text"
+                name="addEddition"
+                aria-label="First name"
+                class="form-control"
+              />
+            </div>
+            <div class="input-group">
+              <span class="input-group-text">SIZE</span>
+              <input
+                type="text"
+                name="addSize"
+                aria-label="First name"
+                class="form-control"
+              />
+            </div>
+            <div class="input-group">
+              <span class="input-group-text">COLOR</span>
+              <input
+                type="text"
+                name="addColor"
+                aria-label="First name"
+                class="form-control"
+              />
+            </div>
+            <div class="input-group">
+              <span class="input-group-text">IMAGE URL</span>
+              <input
+                type="text"
+                name="addImg"
+                aria-label="First name"
+                class="form-control"
+              />
+            </div>
+            <div class="input-group">
+              <span class="input-group-text">PRICE</span>
+              <input
+                type="text"
+                name="addPrice"
+                aria-label="First name"
+                class="form-control"
+              />
+            </div>
+            <button class="btn btn-primary addBTN" type="submit">
+              ADD ITEM
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+  crossorigin="anonymous"
+></script>

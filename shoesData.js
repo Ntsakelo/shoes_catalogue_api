@@ -221,9 +221,112 @@ export default function ShoesData(db) {
   async function displayCart() {
     try {
       let results = await db.manyOrNone(
-        "select orders.item as edition,orders.color,orders.size,order_qty,orders.price,image_url from orders join products on orders.item_id = products.id"
+        "select orders.id, orders.item as edition,orders.color,orders.size,order_qty,orders.price,image_url from orders join products on orders.item_id = products.id"
       );
-      console.log(results);
+      return results;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function updtQty(orderId, qty) {
+    try {
+      let resultQty = await db.oneOrNone(
+        "select order_qty from orders where id = $1",
+        [orderId]
+      );
+      let resultId = await db.oneOrNone(
+        "select item_id from orders where id = $1",
+        [orderId]
+      );
+      let resultsPrice = await db.oneOrNone(
+        "select price from products where id=$1",
+        [resultId.item_id]
+      );
+      let amount = Number(resultsPrice.price);
+      if (qty > resultQty.order_qty) {
+        await db.none("update orders set order_qty = $1 where id=$2", [
+          qty,
+          orderId,
+        ]);
+        await db.none("update orders set price = $1 * $2 where id = $3", [
+          amount,
+          qty,
+          orderId,
+        ]);
+      }
+      if (qty < resultQty.order_qty) {
+        await db.none("update orders set order_qty = $1 where id=$2", [
+          qty,
+          orderId,
+        ]);
+        await db.none("update orders set price = $1 * $2 where id = $3", [
+          amount,
+          qty,
+          orderId,
+        ]);
+      }
+
+      let results = await db.manyOrNone(
+        "select orders.id, orders.item as edition,orders.color,orders.size,order_qty,orders.price,image_url from orders join products on orders.item_id = products.id"
+      );
+      return results;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  ///ADMIN LOGIC
+  async function getLogin(user, password) {
+    try {
+      let results = await db.oneOrNone(
+        "select * from admin_details where username = $1 and user_password = $2",
+        [user, password]
+      );
+      return results;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async function productsList() {
+    try {
+      let results = await db.manyOrNone(
+        "select  products.id,brand, item AS edition,price,size,stock_qty,color from products JOIN stock ON products.id = stock.item_id ORDER BY products.id;"
+      );
+      return results;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function updateStock(edition, size, color, quantity) {
+    try {
+      let itemId = await db.oneOrNone("select id from products where item=$1", [
+        edition,
+      ]);
+      let results = await db.oneOrNone(
+        "select count(*) from stock where item_id = $1 and size = $2 and color = $3",
+        [itemId.id, size, color]
+      );
+
+      if (Number(results.count) === 0) {
+        await db.none(
+          "insert into stock(item_id,color,size,stock_qty) values($1,$2,$3,$4)",
+          [itemId.id, color, size, quantity]
+        );
+      } else if (Number(results.count > 0)) {
+        await db.none(
+          "update stock set stock_qty = stock_qty + $1 where item_id = $2 and size = $3 and color = $4",
+          [quantity, itemId.id, size, color]
+        );
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async function getEdition() {
+    try {
+      let results = await db.manyOrNone("select item from products");
       return results;
     } catch (err) {
       console.log(err);
@@ -247,5 +350,10 @@ export default function ShoesData(db) {
     addItem,
     cartCount,
     displayCart,
+    updtQty,
+    getLogin,
+    productsList,
+    updateStock,
+    getEdition,
   };
 }

@@ -211,6 +211,21 @@ export default function (ShoesData) {
       next(err);
     }
   }
+  async function qtyUpdate(req, res, next) {
+    try {
+      let qty = Number(req.params.qty);
+      let orderId = Number(req.params.orderId);
+      let results = await ShoesData.updtQty(orderId, qty);
+
+      res.json({
+        status: "success",
+        data: results,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
   return {
     getCategories,
     displayProducts,
@@ -229,5 +244,6 @@ export default function (ShoesData) {
     addToCart,
     countItems,
     viewCart,
+    qtyUpdate,
   };
 }

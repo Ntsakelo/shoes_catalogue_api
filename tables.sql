@@ -1,4 +1,6 @@
-
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS stock;
+DROP TABLE IF EXISTS products;
 
 CREATE TABLE products (
     id serial primary key not null,
@@ -30,6 +32,13 @@ CREATE TABLE orders (
     foreign key(item_id) references products(id) ON DELETE CASCADE,
     foreign key(stock_id) references stock(id) ON DELETE CASCADE
 );
+CREATE TABLE admin_details(
+    id serial primary key not null,
+    username VARCHAR(20) not null,
+    user_password VARCHAR(20) not null
+);
+-- INSERT INTO admin_details
+INSERT INTO admin_details (username,user_password) VALUES ('admin','admin8989');
 -- INSERT INTO products
 INSERT INTO products (item,brand,category,image_url,price) VALUES ('Ivonia high heels','Ivonia','Women','https://images.pexels.com/photos/336372/pexels-photo-336372.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',400.00);
 INSERT INTO products (item,brand,category,image_url,price) VALUES ('Splendid formal shoe','Splendid','Men','https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',500.00);
