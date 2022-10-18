@@ -221,7 +221,7 @@ export default function ShoesData(db) {
   async function displayCart() {
     try {
       let results = await db.manyOrNone(
-        "select orders.id, orders.item as edition,orders.color,orders.size,order_qty,orders.price,image_url from orders join products on orders.item_id = products.id"
+        "select orders.id, orders.item as edition,orders.color,orders.size,order_qty,stock_qty,orders.price,image_url from orders join products on orders.item_id = products.id join stock on orders.stock_id = stock.id"
       );
       return results;
     } catch (err) {
@@ -239,12 +239,22 @@ export default function ShoesData(db) {
         "select item_id from orders where id = $1",
         [orderId]
       );
+
       let resultsPrice = await db.oneOrNone(
         "select price from products where id=$1",
         [resultId.item_id]
       );
       let amount = Number(resultsPrice.price);
       if (qty > resultQty.order_qty) {
+        let orderQty = await db.oneOrNone(
+          "select order_qty from orders where id=$1",
+          [orderId]
+        );
+        let Quantity = orderQty.order_qty;
+        await db.none(
+          "update stock set stock_qty = stock_qty + $1 where item_id=$2",
+          [Quantity, resultId.item_id]
+        );
         await db.none("update orders set order_qty = $1 where id=$2", [
           qty,
           orderId,
@@ -254,8 +264,22 @@ export default function ShoesData(db) {
           qty,
           orderId,
         ]);
+        await db.none(
+          "update stock set stock_qty = stock_qty - $1 where item_id=$2",
+          [qty, resultId.item_id]
+        );
       }
+      ///problem is here(reverse subtract not working properly)
       if (qty < resultQty.order_qty) {
+        let orderQty = await db.oneOrNone(
+          "select order_qty from orders where id=$1",
+          [orderId]
+        );
+        let Quantity = orderQty.order_qty;
+        await db.none(
+          "update stock set stock_qty = stock_qty + $1  where item_id=$2",
+          [Quantity, resultId.item_id]
+        );
         await db.none("update orders set order_qty = $1 where id=$2", [
           qty,
           orderId,
@@ -265,10 +289,15 @@ export default function ShoesData(db) {
           qty,
           orderId,
         ]);
+
+        await db.none(
+          "update stock set stock_qty = stock_qty - $1 where item_id=$2",
+          [qty, resultId.item_id]
+        );
       }
 
       let results = await db.manyOrNone(
-        "select orders.id, orders.item as edition,orders.color,orders.size,order_qty,orders.price,image_url from orders join products on orders.item_id = products.id"
+        "select orders.id, orders.item as edition,orders.color,orders.size,order_qty,stock_qty,orders.price,image_url from orders join products on orders.item_id = products.id join stock on orders.stock_id = stock.id"
       );
       return results;
     } catch (err) {

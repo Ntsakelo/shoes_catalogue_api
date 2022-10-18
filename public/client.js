@@ -350,6 +350,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
   });
+  let stckQtyList = [];
   function displayCart() {
     const showCart = document.querySelectorAll(".showCart");
     showCart.forEach((item) => {
@@ -363,9 +364,10 @@ document.addEventListener("DOMContentLoaded", function () {
           data.forEach((item) => {
             totQty += item.order_qty;
             totAmount += Number(item.price);
+            stckQtyList.push(item.stock_qty);
           });
           totList.push({ totQty, totAmount });
-
+          console.log(stckQtyList);
           let template = Handlebars.compile(ordersTemplate.innerHTML);
           ordersDisplay.innerHTML = template({
             orderItems: data,
@@ -374,6 +376,7 @@ document.addEventListener("DOMContentLoaded", function () {
           totalDisplay.innerHTML = template2({
             totals: totList,
           });
+
           myOrderUpdate();
         });
       });
@@ -392,7 +395,10 @@ document.addEventListener("DOMContentLoaded", function () {
       upBtn.addEventListener("click", function () {
         let qty = 0;
 
-        qtyVal2[i].value++;
+        if (qtyVal2[i].value < stckQtyList[i]) {
+          qtyVal2[i].value++;
+        }
+
         qty = Number(qtyVal2[i].value);
         let orderId = bagItems[i].id;
         axios
@@ -402,6 +408,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let data = response.data;
             let totQty = 0;
             let totAmount = 0;
+
             let totList = [];
             let itemPrice = data[i].price;
             data.forEach((item) => {
