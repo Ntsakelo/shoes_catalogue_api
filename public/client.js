@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
   displayProducts();
 
   //display navigation
+  let catCount2;
   function navigation() {
     axios.get("/api/category").then(function (results) {
       let response = results.data;
@@ -60,6 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
       bgNavList.innerHTML = bgTemplate({
         category: data,
       });
+      catCount2 = document.querySelector(".itemsCount");
       categoryFilter();
       itemsCount();
       displayCart();
@@ -209,12 +211,12 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   function itemsCount() {
     //navigation();
-    const catCount2 = document.querySelector(".itemsCount");
+    // const catCount2 = document.querySelector(".itemsCount");
     axios.get("/api/shoes/cartCount").then(function (results) {
       let response = results.data;
       let data = response.data;
       catCount.innerHTML = Number(data.count);
-      // catCount2.innerHTML = Number(data.count);
+      catCount2.innerHTML = Number(data.count);
     });
   }
   itemsCount();
@@ -350,7 +352,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
   });
-  let stckQtyList = [];
+  let cartData;
   function displayCart() {
     const showCart = document.querySelectorAll(".showCart");
     showCart.forEach((item) => {
@@ -361,13 +363,13 @@ document.addEventListener("DOMContentLoaded", function () {
           let totQty = 0;
           let totAmount = 0;
           let totList = [];
+          cartData = data;
           data.forEach((item) => {
             totQty += item.order_qty;
             totAmount += Number(item.price);
-            stckQtyList.push(item.stock_qty);
           });
           totList.push({ totQty, totAmount });
-          console.log(stckQtyList);
+
           let template = Handlebars.compile(ordersTemplate.innerHTML);
           ordersDisplay.innerHTML = template({
             orderItems: data,
@@ -394,11 +396,9 @@ document.addEventListener("DOMContentLoaded", function () {
       let upBtn = upQty[i];
       upBtn.addEventListener("click", function () {
         let qty = 0;
-
-        if (qtyVal2[i].value < stckQtyList[i]) {
+        if (qtyVal2[i].value <= cartData[i].stock_qty) {
           qtyVal2[i].value++;
         }
-
         qty = Number(qtyVal2[i].value);
         let orderId = bagItems[i].id;
         axios

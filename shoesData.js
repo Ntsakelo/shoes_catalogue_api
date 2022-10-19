@@ -185,6 +185,9 @@ export default function ShoesData(db) {
   }
   async function addItem(id, size, qty) {
     try {
+      if (qty === 0) {
+        return;
+      }
       let results = await db.oneOrNone(
         "select distinct products.id , category, brand, item AS edition,color,size,price, image_url from products JOIN stock ON products.id = stock.item_id where products.id =$1 and size=$2",
         [id, size]
@@ -197,15 +200,23 @@ export default function ShoesData(db) {
         "select id from stock where item_id = $1 and size = $2 and color = $3",
         [id, size, color]
       );
+      let count = await db.oneOrNone(
+        "select count(*) from orders where item_id =$1 and size=$2 and color=$3",
+        [id, size, color]
+      );
+      if (Number(count.count) > 0) {
+        return;
+      } else {
+        await db.none(
+          "insert into orders(item_id,stock_id,item,color,size,order_qty,price) values($1,$2,$3,$4,$5,$6,$7)",
+          [id, stockId.id, item, color, size, qty, totalAmount]
+        );
 
-      await db.none(
-        "insert into orders(item_id,stock_id,item,color,size,order_qty,price) values($1,$2,$3,$4,$5,$6,$7)",
-        [id, stockId.id, item, color, size, qty, totalAmount]
-      );
-      await db.none(
-        "update stock set stock_qty =stock_qty - $1 where id = $2",
-        [qty, stockId.id]
-      );
+        await db.none(
+          "update stock set stock_qty =stock_qty - $1 where id = $2 and size=$3",
+          [qty, stockId.id, size]
+        );
+      }
     } catch (err) {
       console.log(err);
     }
@@ -251,9 +262,12 @@ export default function ShoesData(db) {
           [orderId]
         );
         let Quantity = orderQty.order_qty;
+        let size = await db.oneOrNone("select size from orders where id=$1", [
+          orderId,
+        ]);
         await db.none(
-          "update stock set stock_qty = stock_qty + $1 where item_id=$2",
-          [Quantity, resultId.item_id]
+          "update stock set stock_qty = stock_qty + $1 where item_id=$2 and size=$3",
+          [Quantity, resultId.item_id, size.size]
         );
         await db.none("update orders set order_qty = $1 where id=$2", [
           qty,
@@ -265,8 +279,8 @@ export default function ShoesData(db) {
           orderId,
         ]);
         await db.none(
-          "update stock set stock_qty = stock_qty - $1 where item_id=$2",
-          [qty, resultId.item_id]
+          "update stock set stock_qty = stock_qty - $1 where item_id=$2 and size=$3",
+          [qty, resultId.item_id, size.size]
         );
       }
       ///problem is here(reverse subtract not working properly)
@@ -276,9 +290,12 @@ export default function ShoesData(db) {
           [orderId]
         );
         let Quantity = orderQty.order_qty;
+        let size = await db.oneOrNone("select size from orders where id=$1", [
+          orderId,
+        ]);
         await db.none(
-          "update stock set stock_qty = stock_qty + $1  where item_id=$2",
-          [Quantity, resultId.item_id]
+          "update stock set stock_qty = stock_qty + $1  where item_id=$2 and size=$3",
+          [Quantity, resultId.item_id, size.size]
         );
         await db.none("update orders set order_qty = $1 where id=$2", [
           qty,
@@ -291,8 +308,8 @@ export default function ShoesData(db) {
         ]);
 
         await db.none(
-          "update stock set stock_qty = stock_qty - $1 where item_id=$2",
-          [qty, resultId.item_id]
+          "update stock set stock_qty = stock_qty - $1 where item_id=$2 and size=$3",
+          [qty, resultId.item_id, size.size]
         );
       }
 
