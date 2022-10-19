@@ -412,7 +412,9 @@ document.addEventListener("DOMContentLoaded", function () {
             let totList = [];
             let itemPrice = data[i].price;
             data.forEach((item) => {
-              totQty += item.order_qty;
+              if (item.id === Number(orderId)) {
+                totQty += item.order_qty;
+              }
               totAmount += Number(item.price);
             });
             totList.push({ totQty, totAmount });
