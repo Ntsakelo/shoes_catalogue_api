@@ -418,6 +418,7 @@ document.addEventListener("DOMContentLoaded", function () {
               totAmount += Number(item.price);
             });
             totList.push({ totQty, totAmount });
+            console.log(itemPrice);
             itemTotal[i].innerHTML = "R" + itemPrice;
             let template2 = Handlebars.compile(totalTemplate.innerHTML);
             totalDisplay.innerHTML = template2({
@@ -453,6 +454,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             totList.push({ totQty, totAmount });
             itemTotal[i].innerHTML = "R" + itemPrice;
+            console.log(itemPrice);
             let template2 = Handlebars.compile(totalTemplate.innerHTML);
             totalDisplay.innerHTML = template2({
               totals: totList,
