@@ -273,10 +273,11 @@ export default function ShoesData(db) {
           qty,
           orderId,
         ]);
-        await db.none(
-          "update orders set price = $1 * $2 where id = $3 and item_id =$4",
-          [amount, qty, orderId, resultId.item_id]
-        );
+        await db.none("update orders set price = $1 * $2 where id = $3", [
+          amount,
+          qty,
+          orderId,
+        ]);
         await db.none(
           "update stock set stock_qty = stock_qty - $1 where item_id=$2 and size=$3",
           [qty, resultId.item_id, size.size]
