@@ -359,6 +359,10 @@ export default function ShoesData(db) {
   async function checkOutItems() {
     try {
       await db.none("delete from orders");
+      let results = await db.manyOrNone(
+        "select orders.id, orders.item as edition,orders.color,orders.size,order_qty,stock_qty,orders.price,image_url from orders join products on orders.item_id = products.id join stock on orders.stock_id = stock.id order by orders.id"
+      );
+      return results;
     } catch (err) {
       console.log(err);
     }

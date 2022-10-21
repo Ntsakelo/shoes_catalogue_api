@@ -253,9 +253,10 @@ export default function (ShoesData) {
   }
   async function checkOut(req, res, next) {
     try {
-      await ShoesData.checkOutItems();
+      let results = await ShoesData.checkOutItems();
       res.json({
         status: "success",
+        data: results,
       });
     } catch (err) {
       next(err);
