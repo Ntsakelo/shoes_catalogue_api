@@ -232,7 +232,7 @@ export default function ShoesData(db) {
   async function displayCart() {
     try {
       let results = await db.manyOrNone(
-        "select orders.id, orders.item as edition,orders.color,orders.size,order_qty,stock_qty,orders.price,image_url from orders join products on orders.item_id = products.id join stock on orders.stock_id = stock.id"
+        "select orders.id, orders.item as edition,orders.color,orders.size,order_qty,stock_qty,orders.price,image_url from orders join products on orders.item_id = products.id join stock on orders.stock_id = stock.id order by orders.id"
       );
       return results;
     } catch (err) {
@@ -333,7 +333,32 @@ export default function ShoesData(db) {
   }
   async function removeItem(orderId) {
     try {
+      let results = await db.oneOrNone(
+        "select item_id,size,color,order_qty from orders where id=$1",
+        [orderId]
+      );
+      let itemId = results.item_id;
+
+      let size = results.size;
+      let color = results.color;
+      let qty = results.order_qty;
+      await db.none(
+        "update stock set stock_qty = stock_qty + $1 where item_id = $2 and color =$3 and size=$4",
+        [qty, itemId, color, size]
+      );
+
       await db.none("delete from orders where id=$1", [orderId]);
+      let orderRslts = await db.manyOrNone(
+        "select orders.id, orders.item as edition,orders.color,orders.size,order_qty,stock_qty,orders.price,image_url from orders join products on orders.item_id = products.id join stock on orders.stock_id = stock.id order by orders.id"
+      );
+      return orderRslts;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async function checkOutItems() {
+    try {
+      await db.none("delete from orders");
     } catch (err) {
       console.log(err);
     }
@@ -419,5 +444,6 @@ export default function ShoesData(db) {
     getEdition,
     confirmData,
     removeItem,
+    checkOutItems,
   };
 }

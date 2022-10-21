@@ -228,6 +228,7 @@ export default function (ShoesData) {
   async function confirm(req, res, next) {
     try {
       let orderId = Number(req.params.id);
+
       let results = await ShoesData.confirmData(orderId);
       res.json({
         status: "success",
@@ -240,7 +241,19 @@ export default function (ShoesData) {
   async function remove(req, res, next) {
     try {
       let orderId = Number(req.params.id);
-      await ShoesData.removeItem(orderId);
+
+      let results = await ShoesData.removeItem(orderId);
+      res.json({
+        status: "success",
+        data: results,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+  async function checkOut(req, res, next) {
+    try {
+      await ShoesData.checkOutItems();
       res.json({
         status: "success",
       });
@@ -269,5 +282,6 @@ export default function (ShoesData) {
     qtyUpdate,
     confirm,
     remove,
+    checkOut,
   };
 }

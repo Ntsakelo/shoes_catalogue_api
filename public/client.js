@@ -24,6 +24,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const addtoBag = document.querySelector(".addtoBag");
   const confirmDisplay = document.querySelector("#confirmDisplay");
   const confirmTemplate = document.querySelector(".confirmTemplate");
+  const confirmBtn = document.querySelector(".confirmBtn");
+  const checkOutConfirmBtn = document.querySelector(".checkOutConfirmBtn");
 
   //search/filter shoes
   const searchBtn = document.querySelector(".searchBtn");
@@ -355,6 +357,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
   let cartData;
+
   function displayCart() {
     const showCart = document.querySelectorAll(".showCart");
     showCart.forEach((item) => {
@@ -383,7 +386,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           myOrderUpdate();
           confirmRemoval();
-          remove();
         });
       });
     });
@@ -471,7 +473,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   let id;
   function confirmRemoval() {
-    const removeBtn = document.querySelectorAll([".removeBtn"]);
+    const removeBtn = document.querySelectorAll(".removeBtn");
     removeBtn.forEach((btn) => {
       btn.addEventListener("click", function () {
         let orderId = btn.id;
@@ -491,13 +493,44 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   //start here
   function remove() {
-    const confirmBtn = document.querySelector(".confirmBtn");
     confirmBtn.addEventListener("click", function () {
-      axios.get(`api/remove/${id}`).then(function () {
+      axios.get(`/api/remove/${id}`).then(function (results) {
+        let response = results.data;
+        let data = response.data;
+        let totQty = 0;
+        let totAmount = 0;
+        let totList = [];
+        cartData = data;
+        data.forEach((item) => {
+          totQty += item.order_qty;
+          totAmount += Number(item.price);
+        });
+        totList.push({ totQty, totAmount });
+
+        let template = Handlebars.compile(ordersTemplate.innerHTML);
+        ordersDisplay.innerHTML = template({
+          orderItems: data,
+        });
+        let template2 = Handlebars.compile(totalTemplate.innerHTML);
+        totalDisplay.innerHTML = template2({
+          totals: totList,
+        });
+
+        myOrderUpdate();
+        confirmRemoval();
+        itemsCount();
+      });
+    });
+  }
+  remove();
+  function checkOut() {
+    checkOutConfirmBtn.addEventListener("click", function () {
+      axios.get("/api/shoes/checkout").then(function () {
         displayCart();
       });
     });
   }
+  checkOut();
 });
 
 /////

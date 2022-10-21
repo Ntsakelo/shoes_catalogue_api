@@ -403,7 +403,7 @@
               <h5 class="tot">R{{this.totAmount}}</h5>
             </div>
             <div class="d-grid gap-2 col-6 mx-auto">
-              <button class="btn btn-primary checkoutBtn" type="button">
+              <button class="btn btn-primary checkoutBtn" type="button" data-bs-toggle="modal" data-bs-target="#purchaseConfirm">
                 CHECKOUT
               </button>
             </div>
@@ -437,14 +437,14 @@
 </div>
 <script type="text/x-template" class="confirmTemplate">
   {{#each itemName}}
-   <p>Are your sure you want to remove {{this.item}} from the cart?</p>
+   <p>Are your sure you want to remove {{this.item}} from your cart?</p>
   {{/each}}
 </script>
 <div class="modal fade" id="confirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">Confirm removal</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="confirmDisplay">
@@ -453,6 +453,23 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
         <button type="button" class="btn btn-primary confirmBtn" data-bs-dismiss="modal">YES</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="purchaseConfirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Confirm Purchase</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="confirmPurchase">
+        Check out your cart items?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
+        <button type="button" class="btn btn-primary checkOutConfirmBtn" data-bs-dismiss="modal">YES</button>
       </div>
     </div>
   </div>
