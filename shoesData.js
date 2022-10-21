@@ -320,7 +320,24 @@ export default function ShoesData(db) {
       console.log(err);
     }
   }
-
+  ///removal
+  async function confirmData(orderId) {
+    try {
+      let results = await db.oneOrNone("select item from orders where id=$1", [
+        orderId,
+      ]);
+      return results;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async function removeItem(orderId) {
+    try {
+      await db.none("delete from orders where id=$1", [orderId]);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   ///ADMIN LOGIC
   async function getLogin(user, password) {
     try {
@@ -400,5 +417,7 @@ export default function ShoesData(db) {
     productsList,
     updateStock,
     getEdition,
+    confirmData,
+    removeItem,
   };
 }

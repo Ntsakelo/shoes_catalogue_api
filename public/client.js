@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const increaseBtn = document.querySelector(".increase");
   const qtyVal = document.querySelector(".qtyVal");
   const addtoBag = document.querySelector(".addtoBag");
+  const confirmDisplay = document.querySelector("#confirmDisplay");
+  const confirmTemplate = document.querySelector(".confirmTemplate");
 
   //search/filter shoes
   const searchBtn = document.querySelector(".searchBtn");
@@ -380,6 +382,8 @@ document.addEventListener("DOMContentLoaded", function () {
           });
 
           myOrderUpdate();
+          confirmRemoval();
+          remove();
         });
       });
     });
@@ -410,10 +414,11 @@ document.addEventListener("DOMContentLoaded", function () {
             let totAmount = 0;
 
             let totList = [];
-            let itemPrice = data[i].price;
+            let itemPrice;
             data.forEach((item) => {
               if (item.id === Number(orderId)) {
                 totQty += item.order_qty;
+                itemPrice = item.price;
               }
               totAmount += Number(item.price);
             });
@@ -445,10 +450,11 @@ document.addEventListener("DOMContentLoaded", function () {
             let totQty = 0;
             let totAmount = 0;
             let totList = [];
-            let itemPrice = data[i].price;
+            let itemPrice;
             data.forEach((item) => {
               if (item.id === Number(orderId)) {
                 totQty += item.order_qty;
+                itemPrice = item.price;
               }
               totAmount += Number(item.price);
             });
@@ -462,6 +468,35 @@ document.addEventListener("DOMContentLoaded", function () {
           });
       });
     }
+  }
+  let id;
+  function confirmRemoval() {
+    const removeBtn = document.querySelectorAll([".removeBtn"]);
+    removeBtn.forEach((btn) => {
+      btn.addEventListener("click", function () {
+        let orderId = btn.id;
+        id = orderId;
+        axios.get(`api/remove/confirm/${orderId}`).then(function (results) {
+          let response = results.data;
+          let data = response.data;
+          let list = [];
+          list.push(data);
+          let template = Handlebars.compile(confirmTemplate.innerHTML);
+          confirmDisplay.innerHTML = template({
+            itemName: list,
+          });
+        });
+      });
+    });
+  }
+  //start here
+  function remove() {
+    const confirmBtn = document.querySelector(".confirmBtn");
+    confirmBtn.addEventListener("click", function () {
+      axios.get(`api/remove/${id}`).then(function () {
+        displayCart();
+      });
+    });
   }
 });
 

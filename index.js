@@ -74,6 +74,8 @@ app.get("/api/category", shoesAPI.getCategories);
 app.get("/api/shoes/:category", shoesAPI.showByCategory);
 app.get("/api/orders", shoesAPI.viewCart);
 app.get("/api/orders/edit/:qty/:orderId", shoesAPI.qtyUpdate);
+app.get("/api/remove/confirm/:id", shoesAPI.confirm);
+app.get("api/remove/:id", shoesAPI.remove);
 
 const PORT = process.env.PORT || 3060;
 app.listen(PORT, function () {

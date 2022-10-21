@@ -225,7 +225,29 @@ export default function (ShoesData) {
       next(err);
     }
   }
-
+  async function confirm(req, res, next) {
+    try {
+      let orderId = Number(req.params.id);
+      let results = await ShoesData.confirmData(orderId);
+      res.json({
+        status: "success",
+        data: results,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+  async function remove(req, res, next) {
+    try {
+      let orderId = Number(req.params.id);
+      await ShoesData.removeItem(orderId);
+      res.json({
+        status: "success",
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
   return {
     getCategories,
     displayProducts,
@@ -245,5 +267,7 @@ export default function (ShoesData) {
     countItems,
     viewCart,
     qtyUpdate,
+    confirm,
+    remove,
   };
 }

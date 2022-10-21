@@ -362,7 +362,7 @@
       </div>
     <script type="text/x-template" class="ordersTemplate">
       {{#each orderItems}}
-       <button type="button" class="btn-close removeBtn" aria-label="Close" id={{this.id}}></button>  
+       <button type="button" class="btn-close removeBtn" aria-label="Close" id={{this.id}} data-bs-toggle="modal" data-bs-target="#confirm"></button>  
       <div class="col bagItems" id={{this.id}}>
          
               <div class="itemPicture">
@@ -428,28 +428,32 @@
         </div>
        
         <div class="col purchase">
-          <!-- <div class="checkOut">
-            <h3 class="orderHead">Your order</h3>
-            <div class="orderDetails clearfix">
-              <p class="orderQty">1 item(s)</p>
-              <p class="orderTot">R500</p>
-            </div>
-            <div class="totals clearfix">
-              <h5 class="totText">Total</h5>
-              <h5 class="tot">R500</h5>
-            </div>
-            <div class="d-grid gap-2 col-6 mx-auto">
-              <button class="btn btn-primary checkoutBtn" type="button">
-                CHECKOUT
-              </button>
-            </div>
-          </div> -->
+      
         </div>
       </div>
-      <!-- <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
-      </div> -->
+      
+    </div>
+  </div>
+</div>
+<script type="text/x-template" class="confirmTemplate">
+  {{#each itemName}}
+   <p>Are your sure you want to remove {{this.item}} from the cart?</p>
+  {{/each}}
+</script>
+<div class="modal fade" id="confirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="confirmDisplay">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
+        <button type="button" class="btn btn-primary confirmBtn" data-bs-dismiss="modal">YES</button>
+      </div>
     </div>
   </div>
 </div>
