@@ -333,6 +333,9 @@ input::-webkit-inner-spin-button {
   float: right;
   margin-top: 5px;
 }
+.product h6 {
+  text-align: center;
+}
 @media screen and (width: 280px) {
   #letterStyle {
     font-size: 20px;
