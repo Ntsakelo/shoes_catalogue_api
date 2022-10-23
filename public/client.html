@@ -338,6 +338,7 @@
                         min="1"
                         value="1"
                         aria-valuemax="{{this.qty}}"
+                        disabled
                       />
                       <button class="increase qtyBtn" type="button">+</button>
                     </form>
@@ -380,7 +381,7 @@
                   <div class="setQty">
                     <form action="">
                       <button class="downQty qtyBtn" type="button">-</button>
-                      <input class="qtyVal qtyVal2" type="number" value="{{this.order_qty}}"/>
+                      <input class="qtyVal qtyVal2" type="number" value="{{this.order_qty}}" disabled/>
                       <button class="upQty qtyBtn" type="button">+</button>
                     </form>
                   </div>

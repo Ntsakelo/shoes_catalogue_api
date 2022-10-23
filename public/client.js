@@ -172,9 +172,16 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   sizes.forEach((size) => {
     addItem();
-    size.classList.add("sizeUnselected");
+
     size.addEventListener("click", function () {
+      size.classList.add("sizeUnselected");
       qtyVal.value = 1;
+      let currentSize = size.id;
+      if (size.id === currentSize) {
+        size.classList.add("sizeSelected");
+      } else if (size.id !== currentSize) {
+        size.classList.remove("sizeSelected");
+      }
       // if (!size.classList.contains("sizeSelected")) {
       //   size.classList.remove("sizeUnselected");
       //   size.classList.add("sizeSelected");

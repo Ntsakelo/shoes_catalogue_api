@@ -362,14 +362,19 @@ input::-webkit-inner-spin-button {
     margin: auto;
     width: 230px;
   }
+  #toCartDisplay {
+    margin-bottom: 0px;
+
+    height: 420px;
+  }
   #sizesQty {
     text-align: center;
-    border: 1px solid red;
+
     margin-top: 0px;
   }
-  .modal-footer {
+  /* .modal-footer {
     border: 1px solid red;
-  }
+  } */
   .login {
     width: 100%;
     height: 300px;
