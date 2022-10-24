@@ -151,6 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
     for (let i = 0; i < cartBtn.length; i++) {
       let btn = cartBtn[i];
       btn.addEventListener("click", function () {
+        sizeClass();
         let id = Number(product[i].id);
         productId = id;
         sizeStockDisplay.innerHTML = "";
@@ -170,25 +171,19 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   }
+  function sizeClass() {
+    for (let i = 0; i < sizes.length; i++) {
+      sizes[i].classList.remove("sizeSelected");
+    }
+  }
   sizes.forEach((size) => {
     addItem();
-
     size.addEventListener("click", function () {
-      size.classList.add("sizeUnselected");
+      // size.classList.add("sizeUnselected");
       qtyVal.value = 1;
-      let currentSize = size.id;
-      if (size.id === currentSize) {
-        size.classList.add("sizeSelected");
-      } else if (size.id !== currentSize) {
-        size.classList.remove("sizeSelected");
-      }
-      // if (!size.classList.contains("sizeSelected")) {
-      //   size.classList.remove("sizeUnselected");
-      //   size.classList.add("sizeSelected");
-      // } else if (size.classList.contains("sizeSelected")) {
-      //   size.classList.remove("sizeSelected");
-      //   size.classList.add("sizeUnselected");
-      // }
+      sizeClass();
+      size.classList.add("sizeSelected");
+
       let shoeSize = Number(size.id);
       selectedSize = shoeSize;
       let qtyList = [];
